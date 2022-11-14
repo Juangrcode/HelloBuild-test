@@ -4,7 +4,7 @@ interface Config {
 }
 const config: Config = {
   apiKeyToken: process.env.REACT_APP_API_KEY_TOKEN || '',
-  authApi: 'http://localhost:3000',
+  authApi: process.env.REACT_APP_AUTH_API || 'http://localhost:3000',
 };
 
 export default config;
