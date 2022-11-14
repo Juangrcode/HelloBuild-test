@@ -2,18 +2,19 @@ import { useContext, useRef } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
 import AppContext from '../context/AppContext';
 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { UseInitialState } from '../models/InitialState.model';
 
-type Props = {
-  path: string;
-};
+type Props = {};
 
 const Repositories: React.FC<Props> = () => {
   const {
     state: { user },
     setCreateRepository,
-  }: any = useContext(AppContext);
+  }: UseInitialState | any = useContext(AppContext);
   const form: React.MutableRefObject<any> = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const formData = new FormData(form.current);
@@ -22,12 +23,11 @@ const Repositories: React.FC<Props> = () => {
       isFavorite: Boolean(formData.get('isFavorite')),
       user: user && user.user?.id,
     };
-    console.log({ buyer });
-    // const res = await signUp(buyer);
+
     if (user) {
       const res = setCreateRepository(buyer, user.token);
       if (res) {
-        // history.push('/profile');
+        navigate('/profile');
       }
     }
   };
@@ -38,19 +38,6 @@ const Repositories: React.FC<Props> = () => {
       <form ref={form} className="flex justify-center items-center flex-col">
         <label htmlFor="name">
           <input type="text" name="name" placeholder="Nombre del repositorio *" />
-          {/* {errorMsg && <p className="col-12 no-gutter text-start text-error letter_uppercase">{errorMsg}</p>}
-              {((!errorMsg && props.withText(props.name)) || props.withText(props.name) === 0) && !withoutText && (
-                <p className="col-12 no-gutter text-start">{`${props.name} ${required ? '*' : ''}`}</p>
-              )}
-              <Input
-                {...props}
-                placeholder={
-                  props.placeholder
-                    ? `${props.placeholder} ${required ? '*' : ''}`
-                    : `${props.name} ${required ? '*' : ''}`
-                }
-                error={errorMsg}
-              /> */}
         </label>
         <label htmlFor="isFavorite" className="py-4 flex items-center">
           <input className="w-4 h-4 min-w-[20px] mr-2" type="checkbox" name="isFavorite" />

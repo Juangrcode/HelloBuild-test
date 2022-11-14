@@ -1,39 +1,34 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 
 import profile from '../assets/icons/profile-black.png';
 import { Repository } from '../models/Repository.model';
 import PrimaryButton from '../components/PrimaryButton';
+import { useNavigate } from 'react-router-dom';
+import { UseInitialState } from '../models/InitialState.model';
 
-type Props = {
-  path: string;
-};
+type Props = {};
 
 const Profile: React.FC<Props> = () => {
   const {
     state: { user, repositories, repositoriesFav },
     setRepositories,
     setUpdateRepository,
-    setRepositoriesFav,
-  }: any = useContext(AppContext);
+  }: UseInitialState | any = useContext(AppContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log({ user, repositories });
     if (user) {
       setRepositories(user.user?.id, user.token);
     }
-    setRepositoriesFav();
   }, []);
 
   const handleCreateRepository = () => {
-    // history.push('/create-repository');
+    navigate('/create-repository');
   };
 
   const handleClickUpdateRepository = (e: React.ChangeEvent<HTMLInputElement>, repository: Repository) => {
-    console.log({ e, repository });
-
-    setUpdateRepository(repository._id, { ...repository, isFavorite: Boolean(e.target?.value) }, user.token);
-    setRepositoriesFav();
+    setUpdateRepository(repository._id, { ...repository, isFavorite: e.target?.checked }, user.token);
   };
 
   return (

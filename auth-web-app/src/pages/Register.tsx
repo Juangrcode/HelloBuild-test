@@ -1,14 +1,15 @@
 import { useContext, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import PrimaryButton from '../components/PrimaryButton';
 import AppContext from '../context/AppContext';
+import { UseInitialState } from '../models/InitialState.model';
 
-type Props = {
-  path: string;
-};
+type Props = {};
 
 const Register: React.FC<Props> = () => {
-  const { signUp }: any = useContext(AppContext);
+  const { signUp }: UseInitialState | any = useContext(AppContext);
   const form: React.MutableRefObject<any> = useRef(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const formData = new FormData(form.current);
@@ -16,11 +17,10 @@ const Register: React.FC<Props> = () => {
       username: formData.get('username'),
       password: formData.get('password'),
     };
-    console.log({ buyer });
     const res = await signUp(buyer);
 
     if (res) {
-      // history.push('/login');
+      navigate('/login');
     }
   };
 
@@ -51,6 +51,12 @@ const Register: React.FC<Props> = () => {
             </label>
             <PrimaryButton text="Registrarse" onClick={handleSubmit} type="button" />
           </form>
+          <p className="pt-4">
+            ¿Ya tienes cuenta?,
+            <Link to="/login">
+              <strong> Inicia sesión</strong>
+            </Link>
+          </p>
         </div>
       </div>
     </div>

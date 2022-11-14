@@ -1,29 +1,27 @@
-import { RouteComponentProps } from '@reach/router';
 import { useContext, useRef } from 'react';
-import { Link } from '@reach/router';
+import { Link, useNavigate } from 'react-router-dom';
 import PrimaryButton from '../components/PrimaryButton';
 import AppContext from '../context/AppContext';
+import { UseInitialState } from '../models/InitialState.model';
+import { User } from '../models/User.model';
 
-type Props = {
-  path: string;
-};
+type Props = {};
 
-const Login: React.FC<Props> = (props: RouteComponentProps) => {
-  const { signIn }: any = useContext(AppContext);
+const Login: React.FC<Props> = () => {
+  const { signIn }: UseInitialState | any = useContext(AppContext);
   const form: React.MutableRefObject<any> = useRef(null);
-  // const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const formData = new FormData(form.current);
-    const buyer = {
-      username: formData.get('username'),
-      password: formData.get('password'),
+    const buyer: User = {
+      username: String(formData.get('username')),
+      password: String(formData.get('password')),
     };
-    console.log({ buyer });
     const res = await signIn(buyer);
 
     if (res) {
-      // history('/profile');
+      navigate('/profile');
     }
   };
 
@@ -35,19 +33,6 @@ const Login: React.FC<Props> = (props: RouteComponentProps) => {
           <form ref={form} className="flex justify-center items-center flex-col">
             <label htmlFor="username">
               <input type="text" name="username" placeholder="Nombre de usuario *" />
-              {/* {errorMsg && <p className="col-12 no-gutter text-start text-error letter_uppercase">{errorMsg}</p>}
-              {((!errorMsg && props.withText(props.name)) || props.withText(props.name) === 0) && !withoutText && (
-                <p className="col-12 no-gutter text-start">{`${props.name} ${required ? '*' : ''}`}</p>
-              )}
-              <Input
-                {...props}
-                placeholder={
-                  props.placeholder
-                    ? `${props.placeholder} ${required ? '*' : ''}`
-                    : `${props.name} ${required ? '*' : ''}`
-                }
-                error={errorMsg}
-              /> */}
             </label>
             <label htmlFor="password" className="py-4">
               <input type="password" name="password" placeholder="Contraseña *" />

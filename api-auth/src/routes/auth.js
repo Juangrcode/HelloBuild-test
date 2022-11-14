@@ -24,7 +24,7 @@ const validation = require('../utils/middlewares/validationHandler');
 // Sign-in
 router.post('/sign-in', async (req, res, next) => {
   const { apiKeyToken } = req.body;
-  console.log({ apiKeyToken });
+
   if (!apiKeyToken) {
     next(boom.unauthorized('apiKeyToken is required'));
   }
@@ -48,7 +48,6 @@ router.post('/sign-in', async (req, res, next) => {
       const apiKey = await apiKeysService.getApiKey({
         token: apiKeyToken
       });
-
       const { _id: id, username } = user;
 
       const resultSignIn = await authService.signToken({

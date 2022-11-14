@@ -1,31 +1,18 @@
-import { useEffect, useState } from 'react';
+// React
+import { useContext } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 
-import { Router } from '@reach/router';
-import NotFound from '../pages/NotFound';
+const AuthRoute = ({ children, redirectTo = '/' }: any) => {
+  const {
+    state: { user },
+  }: any = useContext(AppContext);
 
-const AuthRoute = (props: any) => {
-  console.log({ props });
-  const { location, user } = props;
+  if (!user.user) {
+    return <Navigate to={redirectTo} />;
+  }
 
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    if (user?.id) {
-      setIsAuth(true);
-    }
-  }, [location?.pathname, user]);
-
-  return (
-    <>
-      {isAuth ? (
-        <Router {...props} />
-      ) : (
-        <Router>
-          <NotFound default />
-        </Router>
-      )}
-    </>
-  );
+  return children ? children : <Outlet />;
 };
 
 export default AuthRoute;

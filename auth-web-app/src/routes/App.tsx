@@ -1,50 +1,40 @@
-import { Router, Redirect } from '@reach/router';
+// React
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import AppContext from '../context/AppContext';
+import useInitialState from '../hooks/useInitialState';
 
+// Authentication
 import Auth from './Auth';
+import AuthRoute from './AuthRoute';
+
 import Layout from '../components/Layout';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Repositories from '../pages/Repositories';
-
-import useInitialState from '../hooks/useInitialState';
-// import AuthRoute from './AuthRoute';
 import NotFound from '../pages/NotFound';
-import { useEffect, useState } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
 
 const App = () => {
   const initialState = useInitialState();
-  // const location = useLocation();
-  const [loggedUser, setLoggedUser] = useLocalStorage<string>('loggedUser', '');
-
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    console.log({ loggedUser, initialState });
-    if (initialState.state?.user && loggedUser) {
-      setIsAuth(true);
-      initialState.setLogged(loggedUser);
-    }
-  }, [initialState.state?.user, loggedUser]);
 
   return (
     <AppContext.Provider value={initialState}>
-      {/* <Router> */}
-      <Auth>
-        <Layout>
-          <Router>
-            <Redirect from="/" to="/login" />
-            <Login path="login" />
-            <Register path="/register" />
-            <Profile path="/profile" />
-            <Repositories path="/create-repository" />
-            <NotFound default />
-          </Router>
-        </Layout>
-      </Auth>
-      {/* </Router> */}
+      <BrowserRouter>
+        <Auth>
+          <Layout>
+            <Routes>
+              <Route index element={<Login />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route element={<AuthRoute />}>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/create-repository" element={<Repositories />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </Auth>
+      </BrowserRouter>
     </AppContext.Provider>
   );
 };

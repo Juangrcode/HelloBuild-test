@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Services
+const passport = require('passport');
 const repositoriesService = require('../services/repositories');
 
 // Responses
@@ -19,6 +20,7 @@ const {
 // JWT Strategy middleware
 require('../utils/auth/strategies/jwt');
 const validation = require('../utils/middlewares/validationHandler');
+const scopesValidationHandler = require('../utils/middlewares/scopesValidationHandler');
 
 /*
    ---------------------- Repositories Routes ----------------------
@@ -28,8 +30,8 @@ const validation = require('../utils/middlewares/validationHandler');
 router.get(
   '/:repositoryId',
   validation({ repositoryId: repositoryIdSchema }, 'params'),
-  // passport.authenticate('jwt', { session: false }),
-  // scopesValidationHandler(['read:repositories']),
+  passport.authenticate('jwt', { session: false }),
+  scopesValidationHandler(['read:repositories']),
   async (req, res, next) => {
     const { repositoryId } = req.params;
 
@@ -49,8 +51,8 @@ router.get(
 router.post(
   '/',
   validation(createRepositorySchema),
-  // passport.authenticate('jwt', { session: false }),
-  // scopesValidationHandler(['create:repositories']),
+  passport.authenticate('jwt', { session: false }),
+  scopesValidationHandler(['create:repositories']),
   async (req, res, next) => {
     const { body: repository } = req;
 
@@ -77,8 +79,8 @@ router.put(
   '/:repositoryId',
   validation({ repositoryId: repositoryIdSchema }, 'params'),
   validation(updateRepositorySchema),
-  // passport.authenticate('jwt', { session: false }),
-  // scopesValidationHandler(['update:repositories']),
+  passport.authenticate('jwt', { session: false }),
+  scopesValidationHandler(['update:repositories']),
   async (req, res, next) => {
     const { repositoryId } = req.params;
     const { body: repository } = req;
@@ -106,8 +108,8 @@ router.put(
 router.delete(
   '/:repositoryId',
   validation({ repositoryId: repositoryIdSchema }, 'params'),
-  // passport.authenticate('jwt', { session: false }),
-  // scopesValidationHandler(['delete:repositories']),
+  passport.authenticate('jwt', { session: false }),
+  scopesValidationHandler(['delete:repositories']),
   async (req, res, next) => {
     const { repositoryId } = req.params;
 

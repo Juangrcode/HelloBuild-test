@@ -4,11 +4,6 @@ import { Repository } from '../models/Repository.model';
 
 const AUTH_API = config.authApi;
 
-// const validToken = () => {
-//   const { data } = getItemInLocalStorage('loggedEdySan') || getItemInSessionStorage('loggedEdySan');
-//   return data.token;
-// };
-
 export const getRepositoriesByUser = async (userId: string, token: string) => {
   try {
     const response = await axios({

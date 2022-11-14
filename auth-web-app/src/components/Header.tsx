@@ -1,30 +1,30 @@
-// import { useContext } from 'react';
-import { Link, useNavigate } from '@reach/router';
-// import AppContext from '../context/AppContext';
+// React
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 import '../styles/components/Header.css';
 
 import profile from '../assets/icons/profile.png';
-import { useContext } from 'react';
-import AppContext from '../context/AppContext';
 import PrimaryButton from './PrimaryButton';
+import { UseInitialState } from '../models/InitialState.model';
 
 type Props = {};
 
 const Header: React.FC<Props> = () => {
-  const { state, setLogout }: any = useContext(AppContext);
-  // const history = useNavigate();
+  const { state, setLogout }: UseInitialState | any = useContext(AppContext);
+  const navigate = useNavigate();
   const { user } = state;
 
   const handleLogout = () => {
     setLogout();
-    // history('/login');
+    navigate('/');
   };
 
   return (
     <div className="Header">
       <div className="Header__container container">
         <h1 className="Header-title">
-          <Link to="/login">HELLOBUILD TEST</Link>
+          <Link to={user.user ? '/profile' : '/login'}>HELLOBUILD GITHUB</Link>
         </h1>
         <div className="Header-profile flex gap-8 items-center">
           <Link to="/profile">
